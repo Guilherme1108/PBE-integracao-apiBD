@@ -29,9 +29,20 @@ app.use((request, response, next) => {
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
 //EndPoints para a rota de filme
-app.get('/v1/locadora/filme', cors(), async function(request, response){
+app.get('/v1/locadora/filmes', cors(), async function(request, response){
     //Chama a função para listar os filmes do BD
     let filme = await controllerFilme.listarFilmes()
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
+app.get('/v1/locadora/filme/:id', cors(), async function(request, response){
+
+    //recebe o ID encaminhado via parametro na erquisição
+    let idFilme = request.params.id
+
+    //Chama a função para listar os filmes do BD
+    let filme = await controllerFilme.BuscarFilmeId(idFilme)
     response.status(filme.status_code)
     response.json(filme)
 })
