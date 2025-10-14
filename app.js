@@ -6,9 +6,12 @@
 *****************************************************************************************/
 
 //Import das dependencias da API
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
+const express       = require('express')
+const cors          = require('cors')
+const bodyParser    = require('body-parser')
+
+//CRia um objeto especialista no formado JSON para receber dados via POST e PUT
+const bodyParserJSON = bodyParser.json()
 
 //Cria um onjeto app para criar a API
 const app = express()
@@ -29,6 +32,8 @@ app.use((request, response, next) => {
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
 //EndPoints para a rota de filme
+
+//Retorna a lista de todos os filmes
 app.get('/v1/locadora/filmes', cors(), async function(request, response){
     //Chama a função para listar os filmes do BD
     let filme = await controllerFilme.listarFilmes()
@@ -36,6 +41,7 @@ app.get('/v1/locadora/filmes', cors(), async function(request, response){
     response.json(filme)
 })
 
+//Retorna o filme filtrando pelo ID
 app.get('/v1/locadora/filme/:id', cors(), async function(request, response){
 
     //recebe o ID encaminhado via parametro na erquisição
@@ -43,6 +49,20 @@ app.get('/v1/locadora/filme/:id', cors(), async function(request, response){
 
     //Chama a função para listar os filmes do BD
     let filme = await controllerFilme.BuscarFilmeId(idFilme)
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
+app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function(request, response){
+    //Recebe os dados do body da requisição (Se você utilziar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //Recebe o tipo de dados da requisição (JSON ou XML ou outros formatos...)
+    let contentType = request.headers['content-type']
+
+    //Chama a função da controller para inserir um novo filme, encaminha os dados e o content-type
+    let filme = await controllerFilme.inserirFilme(dadosBody, contentType)
+
     response.status(filme.status_code)
     response.json(filme)
 })
