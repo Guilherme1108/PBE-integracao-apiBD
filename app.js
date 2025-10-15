@@ -70,7 +70,7 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function(request, r
 
 //Atualiza um filme existente
 app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function(request, response){
-    //recebe o id fo filme
+    //recebe o id do filme
     let idFilme = request.params.id
 
     //Recebe os dados a serem atualizados
@@ -78,10 +78,21 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function(request
 
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
-    console.log(contentType)
 
     //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
     let filme = await controllerFilme.atualizarFilme(dadosBody, idFilme, contentType)
+
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
+//Deleta um filme existente
+app.delete('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function(request, response){
+    //recebe o id do filme
+    let idFilme = request.params.id
+
+    //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
+    let filme = await controllerFilme.excluirFilme(idFilme)
 
     response.status(filme.status_code)
     response.json(filme)

@@ -136,7 +136,7 @@ const atualizarFilme = async (filme, id, contentType) => {
                 let validarID = await BuscarFilmeId(id)
 
                 if (validarID.status_code == 200) {
-                    
+
                     //Adiciona o ID do filme no JSON de dados para ser encaminhado ao DAO
                     filme.id = Number(id)
 
@@ -145,10 +145,10 @@ const atualizarFilme = async (filme, id, contentType) => {
                     let resultFilmes = await filmeDAO.setUpdateMovies(filme)
 
                     if (resultFilmes) {
-                        MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_UPDATED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message         = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.filme     = filme
+                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
+                        MESSAGES.DEFAULT_HEADER.items.filme = filme
 
                         return MESSAGES.DEFAULT_HEADER //200
                     } else {
@@ -173,6 +173,42 @@ const atualizarFilme = async (filme, id, contentType) => {
 
 //Exclui um filme buscando pelo ID
 const excluirFilme = async (id) => {
+
+    //Criando um onjeto novo para as mensagens
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+
+        //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
+        let validarID = await BuscarFilmeId(id)
+
+        if (validarID.status_code == 200) {
+
+            //Adiciona o ID do filme no JSON de dados para ser encaminhado ao DAO
+            id = Number(id)
+
+            //Processamento
+            //Chama a função para atualizar um novo filme no BD
+            let resultFilmes = await filmeDAO.setDeleteMovies(id)
+
+            if (resultFilmes) {
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+
+                return MESSAGES.DEFAULT_HEADER //200
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            return validarID //A função buscarFilmeID poderá retornar (400 ou 404 ou 500)
+        }
+
+    } catch (error) {
+        console.log(error)
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+        
+    }
 
 }
 
@@ -219,5 +255,6 @@ module.exports = {
     listarFilmes,
     BuscarFilmeId,
     inserirFilme,
-    atualizarFilme
+    atualizarFilme,
+    excluirFilme
 }
