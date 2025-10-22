@@ -46,7 +46,6 @@ const BuscarFilmeId = async (id) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
-
         //validação da chegada do ID
         if (!isNaN(id) && id != '' && id != null && id > 0) {
             let resultFilmes = await filmeDAO.getSelectByIdMovies(Number(id))
@@ -216,7 +215,6 @@ const excluirFilme = async (id) => {
         }
 
     } catch (error) {
-        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }
@@ -227,7 +225,7 @@ const excluirFilme = async (id) => {
 const validarDadosFilme = async function (filme) {
 
     //Criando um onjeto novo para as mensagens
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     //Validação de todas as entradas de dados
     if (filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.nome.length > 100) {

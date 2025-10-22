@@ -86,7 +86,7 @@ const getSelectByIdMovies = async function (id) {
 }
 
 //Retorna o ultimo ID gerado no BD
-const getSelectLastId = async function (id) {
+const getSelectLastId = async function () {
 
     try {
         //Script SQL para retornar apenas o ultimo ID do banco
@@ -125,7 +125,6 @@ const setInsertMovies = async function (filme) {
             return true
         else
             return false
-
 
     } catch (error) {
         return false
