@@ -245,7 +245,7 @@ const validarDadosFilme = async function (filme) {
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else if (filme.orcamento == '' || filme.orcamento == undefined || filme.orcamento == null || filme.orcamento.length > 12 || typeof (filme.orcamento) != 'number') {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Orçamentp incorreto]'
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Orçamento incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else if (filme.trailer == '' || filme.trailer.length > 200) {

@@ -31,6 +31,7 @@ app.use((request, response, next) => {
 //Import das controllers
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
+const controllerAtor = require('./controller/ator/controller_ator.js')
 
 //EndPoints para a rota de filme
 
@@ -99,7 +100,7 @@ app.delete('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function(requ
     response.json(filme)
 })
 
-/*********************CRUD DOS GENEROS********************************** */
+/*********************CRUD DOS GENEROS***********************************/
 
 //Retorna todos os generos
 app.get('/v1/locadora/generos', cors(), async function(request, response){
@@ -133,10 +134,6 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function(request, 
     response.json(genero)
 })
 
-app.listen(PORT, function(){
-    console.log('API Aguardando Requisições🏎️')
-})
-
 //Atualiza um gênero existente
 app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(request, response){
     //recebe o id do filme
@@ -164,4 +161,45 @@ app.delete('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(req
 
     response.status(genero.status_code)
     response.json(genero)
+})
+
+/*********************CRUD DOS ATORES***********************************/
+
+app.get('/v1/locadora/atores', cors(), async function(request, response){
+    //Chama a função para listar os filmes do BD
+    let ator = await controllerAtor.listarAtores()
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+//Busca ator pelo ID
+app.get('/v1/locadora/ator/:id', cors(), async function(request, response){
+
+    let idAtor = request.params.id
+
+    let ator = await controllerAtor.buscarAtorId(idAtor)
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+//Insere um novo ator
+app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function(request, response){
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let ator = await controllerAtor.inserirAtor(dadosBody, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+
+
+
+
+/********************************************************************* */
+
+app.listen(PORT, function(){
+    console.log('API Aguardando Requisições🏎️')
 })

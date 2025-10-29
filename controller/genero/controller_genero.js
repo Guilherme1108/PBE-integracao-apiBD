@@ -1,6 +1,6 @@
 /*******************************************************************************************************
  * Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de generos
- * Data: 07/10/2025
+ * Data: 22/10/2025
  * Autor: Guilherme Moreira
  * Versão: 1.0
 *******************************************************************************************************/
