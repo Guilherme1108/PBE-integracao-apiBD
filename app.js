@@ -136,7 +136,7 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function(request, 
 
 //Atualiza um gênero existente
 app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(request, response){
-    //recebe o id do filme
+    //recebe o id do genero
     let idGenero = request.params.id
 
     //Recebe os dados a serem atualizados
@@ -145,11 +145,11 @@ app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(reques
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
-    //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
-    let filme = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
+    //Chama a função para atualziar o genero e encaminha os dados, o id e o content-type
+    let genero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(genero.status_code)
+    response.json(genero)
 })
 
 //Deleta um gênero existente
@@ -194,6 +194,34 @@ app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function(request, re
     response.json(ator)
 })
 
+//Atualiza um ator existente
+app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request, response){
+    //recebe o id do filme
+    let idAtor = request.params.id
+
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
+    let ator = await controllerGenero.atualizarGenero(dadosBody, idAtor, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+//Deleta um ator existente
+app.delete('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request, response){
+    let idAtor = request.params.id
+
+    //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
+    let ator = await controllerAtor.excluirAtor(idAtor)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
 
 
 

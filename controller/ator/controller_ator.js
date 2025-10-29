@@ -143,8 +143,88 @@ const validarDadosAtor = async function (ator) {
     }
 }
 
+const atualizarAtor = async (ator, id, contentType) => {
+
+    //Criando um objeto novo para as mensagens
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+
+            let validar = await validarDadosAtor(ator)
+
+            if (!validar) {
+
+                let validarID = await buscarAtorId(id)
+
+                if (validarID.status_code == 200) {
+
+                    ator.id = Number(id)
+
+                    let resultAtor = await atorDAO.setUpdateActor(ator)
+
+                    if (resultAtor) {
+                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
+                        MESSAGES.DEFAULT_HEADER.items.ator = ator
+
+                        return MESSAGES.DEFAULT_HEADER //200
+                    } else {
+                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
+                } else {
+                    return validarID //A função buscarFilmeID poderá retornar (400 ou 404 ou 500)
+                }
+            } else {
+                return validar //400 referente a validação dos dados
+            }
+
+
+        } else {
+            return MESSAGES.ERROR_CONTENT_TYPE //415
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
+const excluirAtor = async (id) => {
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+
+        let validarId = await buscarAtorId(id)
+
+        if (validarId.status_code == 200) {
+
+            id = Number(id)
+
+            let resultAtor = await atorDAO.setDeleteActor(id)
+
+            if (resultAtor) {
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+
+                return MESSAGES.DEFAULT_HEADER //200
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            return validarId // 400 / 404 / 500
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 module.exports = {
     listarAtores,
     buscarAtorId,
-    inserirAtor
+    inserirAtor,
+    atualizarAtor,
+    excluirAtor
 }

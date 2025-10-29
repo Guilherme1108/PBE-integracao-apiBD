@@ -103,9 +103,75 @@ const setInsertActor = async function (ator) {
     }
 }
 
+//Altera um filme no banco de dados
+const setUpdateActor = async function (ator) {
+    try {
+
+        if (ator.data_falescimento == null || ator.data_falescimento == '' || ator.data_falescimento == undefined) {
+            let sql = `UPDATE tbl_ator SET
+                        nome                = '${ator.nome}',
+                        nome_artistico      = '${ator.nome_artistico}',
+                        data_nascimento     = '${ator.data_nascimento}',
+                        data_falescimento   = null,
+                        altura              = '${ator.altura}',
+                        biografia           = '${ator.biografia}',
+            
+                        WHERE id = ${ator.id};`
+
+            let result = await prisma.$executeRawUnsafe(sql)
+
+            if (result)
+                return true
+            else
+                return false
+
+        } else {
+            let sql = `UPDATE tbl_ator SET
+                        nome                = '${ator.nome}',
+                        nome_artistico      = '${ator.nome_artistico}',
+                        data_nascimento     = '${ator.data_nascimento}',
+                        data_falescimento   = '${ator.data_falescimento}',
+                        altura              = '${ator.altura}',
+                        biografia           = '${ator.biografia}',
+
+            WHERE id = ${ator.id};`
+
+            let result = await prisma.$executeRawUnsafe(sql)
+
+            if (result)
+                return true
+            else
+                return false
+        }
+
+
+    } catch (error) {
+        return false
+    }
+}
+
+const setDeleteActor = async function (id) {
+    try {
+        let sql = `DELETE FROM tbl_ator WHERE id = ${id};`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+        else
+            return false
+
+    } catch (error) {
+        return false
+    }
+
+}
+
 module.exports = {
     getSelectAllActor,
     getSelectActorById,
     getSelectLastId,
-    setInsertActor
+    setInsertActor,
+    setUpdateActor,
+    setDeleteActor
 }
