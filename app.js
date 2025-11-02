@@ -32,6 +32,7 @@ app.use((request, response, next) => {
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerAtor = require('./controller/ator/controller_ator.js')
+const controllerPersonagem = require('./controller/personagem/controller_personagem.js')
 
 //EndPoints para a rota de filme
 
@@ -196,7 +197,7 @@ app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function(request, re
 
 //Atualiza um ator existente
 app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request, response){
-    //recebe o id do filme
+    //recebe o id do ator
     let idAtor = request.params.id
 
     //Recebe os dados a serem atualizados
@@ -205,7 +206,7 @@ app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request,
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
-    //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
+    //Chama a função para atualziar o ator e encaminha os dados, o id e o content-type
     let ator = await controllerAtor.atualizarAtor(dadosBody, idAtor, contentType)
 
     response.status(ator.status_code)
@@ -216,14 +217,67 @@ app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request,
 app.delete('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request, response){
     let idAtor = request.params.id
 
-    //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
     let ator = await controllerAtor.excluirAtor(idAtor)
 
     response.status(ator.status_code)
     response.json(ator)
 })
 
+/*********************CRUD DOS PERSONAGENS***********************************/
 
+app.get('/v1/locadora/personagens', cors(), async function(request, response){
+    //Chama a função para listar os filmes do BD
+    let personagem = await controllerPersonagem.listarPersonagens()
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.get('/v1/locadora/personagem/:id', cors(), async function(request, response){
+
+    let idPersonagem = request.params.id
+
+    let personagem = await controllerPersonagem.buscarPersonagemId(idPersonagem)
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function(request, response){
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let personagem = await controllerPersonagem.inserirPersonagem(dadosBody, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+//Atualiza um ator existente
+app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function(request, response){
+    //recebe o id do personagem
+    let idPersonagem = request.params.id
+
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //Chama a função para atualziar o personagem e encaminha os dados, o id e o content-type
+    let personagem = await controllerPersonagem.atualizarPersonagem(dadosBody, idPersonagem, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.delete('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function(request, response){
+    let idPersonagem = request.params.id
+
+    let personagem = await controllerPersonagem.excluirPersonagem(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
 
 
 /********************************************************************* */

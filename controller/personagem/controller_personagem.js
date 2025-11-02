@@ -1,29 +1,29 @@
 /*******************************************************************************************************
- * Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de atores
- * Data: 29/10/2025
+ * Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de personagens
+ * Data: 02/11/2025
  * Autor: Guilherme Moreira
  * Versão: 1.0
 *******************************************************************************************************/
 
-//Import da model do DAO do genero    
-const atorDAO = require('../../model/DAO/ator.js')
+//Import da model do DAO do personagem  
+const personagemDAO = require('../../model/DAO/personagem.js')
 
 //Import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 
-const listarAtores = async () => {
+const listarPersonagens = async () => {
 
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
-        let resultAtor = await atorDAO.getSelectAllActor()
-        
-        if(resultAtor){
-            if (resultAtor.length > 0) {
+        let resultPersonagem = await personagemDAO.getSelectAllCharacter()
+
+        if (resultPersonagem) {
+            if (resultPersonagem.length > 0) {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.atores = resultAtor
+                MESSAGES.DEFAULT_HEADER.items.personagens = resultPersonagem
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -37,19 +37,19 @@ const listarAtores = async () => {
     }
 }
 
-const buscarAtorId = async (id) => {
+const buscarPersonagemId = async (id) => {
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
         if (!isNaN(id) && id != '' && id != null && id > 0) {
-            let resultAtor = await atorDAO.getSelectActorById(Number(id))
+            let resultPersonagem = await personagemDAO.getSelectCharactorById(Number(id))
 
-            if (resultAtor) {
-                if (resultAtor.length > 0) {
+            if (resultPersonagem) {
+                if (resultPersonagem.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.ator = resultAtor
+                    MESSAGES.DEFAULT_HEADER.items.personagem = resultPersonagem
 
                     return MESSAGES.DEFAULT_HEADER //200
                 } else {
@@ -68,25 +68,25 @@ const buscarAtorId = async (id) => {
     }
 }
 
-const inserirAtor = async (ator, contentType) => {
+const inserirPersonagem = async (personagem, contentType) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
         //validação do tipo de conteúdo
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            let validar = await validarDadosAtor(ator)
+            let validar = await validarDadosPersonagem(personagem)
 
             if (!validar) {
-                let resultAtor = await atorDAO.setInsertActor(ator)
+                let resultPersonagem = await personagemDAO.setInsertCharacter(personagem)
 
-                if (resultAtor) {
-                    let lastId = await atorDAO.getSelectLastId()
+                if (resultPersonagem) {
+                    let lastId = await personagemDAO.getSelectLastId()
                     if (lastId) {
-                        ator.id = lastId
+                        personagem.id = lastId
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items = ator
+                        MESSAGES.DEFAULT_HEADER.items = personagem
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -110,7 +110,7 @@ const inserirAtor = async (ator, contentType) => {
     }
 }
 
-const atualizarAtor = async (ator, id, contentType) => {
+const atualizarPersonagem = async (personagem, id, contentType) => {
 
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -118,30 +118,30 @@ const atualizarAtor = async (ator, id, contentType) => {
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validar = await validarDadosAtor(ator)
+            let validar = await validarDadosPersonagem(personagem)
 
             if (!validar) {
 
-                let validarID = await buscarAtorId(id)
+                let validarID = await buscarPersonagemId(id)
 
                 if (validarID.status_code == 200) {
 
-                    ator.id = Number(id)
+                    personagem.id = Number(id)
 
-                    let resultAtor = await atorDAO.setUpdateActor(ator)
+                    let resultPersonagem = await personagemDAO.setUpdateCharacter(personagem)
 
-                    if (resultAtor) {
+                    if (resultPersonagem) {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.ator = ator
+                        MESSAGES.DEFAULT_HEADER.items.personagem = personagem
 
                         return MESSAGES.DEFAULT_HEADER //200
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                     }
                 } else {
-                    return validarID //A função buscarFilmeID poderá retornar (400 ou 404 ou 500)
+                    return validarID //A função buscarPersonagemID poderá retornar (400 ou 404 ou 500)
                 }
             } else {
                 return validar //400 referente a validação dos dados
@@ -157,20 +157,20 @@ const atualizarAtor = async (ator, id, contentType) => {
     }
 }
 
-const excluirAtor = async (id) => {
+const excluirPersonagem = async (id) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
 
-        let validarId = await buscarAtorId(id)
+        let validarId = await buscarPersonagemId(id)
 
         if (validarId.status_code == 200) {
 
             id = Number(id)
 
-            let resultAtor = await atorDAO.setDeleteActor(id)
+            let resultPersonagem = await personagemDAO.setDeleteCharacter(id)
 
-            if (resultAtor) {
+            if (resultPersonagem) {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                 MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
@@ -188,42 +188,37 @@ const excluirAtor = async (id) => {
     }
 }
 
-//Validação dos dados de cadastros e atualização do ator
-const validarDadosAtor = async function (ator) {
+//Validação dos dados de cadastros e atualização do personagem
+const validarDadosPersonagem = async function (personagem) {
 
     //Criando um onjeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     //Validação de todas as entradas de dados
-    if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
+    if (personagem.nome == '' || personagem.nome == undefined || personagem.nome == null || personagem.nome.length > 200) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.nome_artistico.length > 100) {
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data nascimento incorreto]'
+    } else if (personagem.idade.length > 50) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Idade incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.altura == '' || ator.altura == undefined || ator.altura == null || ator.altura.length > 3 || typeof (ator.altura) != 'number') {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Altura incorreto]'
+    } else if (personagem.descricao.length > 1000) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descrição incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.biografia == '' || ator.biografia.length > 1000) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Biografia incorreto]'
+    } else if (personagem.papel == '' || personagem.papel == undefined || personagem.papel == null || personagem.papel.length > 60) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Papel incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else {
         return false
     }
 }
-
 module.exports = {
-    listarAtores,
-    buscarAtorId,
-    inserirAtor,
-    atualizarAtor,
-    excluirAtor
+    listarPersonagens,
+    buscarPersonagemId,
+    inserirPersonagem,
+    atualizarPersonagem,
+    excluirPersonagem
 }
