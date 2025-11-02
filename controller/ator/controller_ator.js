@@ -111,39 +111,10 @@ const inserirAtor = async (ator, contentType) => {
     }
 }
 
-//Validação dos dados de cadastros e atualização do filme
-const validarDadosAtor = async function (ator) {
-
-    //Criando um onjeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
-
-    //Validação de todas as entradas de dados
-    if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (ator.nome_artistico.length > 100) {
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data nascimento incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (ator.altura == '' || ator.altura == undefined || ator.altura == null || ator.altura.length > 4 || typeof (ator.altura) != 'number') {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Altura incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (ator.biografia == '' || ator.biografia.length > 1000) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Biografia incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else {
-        return false
-    }
-}
 
 const atualizarAtor = async (ator, id, contentType) => {
+
+    console.log('ID recebido:', id)
 
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -218,6 +189,37 @@ const excluirAtor = async (id) => {
 
     } catch (error) {
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+//Validação dos dados de cadastros e atualização do filme
+const validarDadosAtor = async function (ator) {
+
+    //Criando um onjeto novo para as mensagens
+        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    //Validação de todas as entradas de dados
+    if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else if (ator.nome_artistico.length > 100) {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data nascimento incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else if (ator.altura == '' || ator.altura == undefined || ator.altura == null || ator.altura.length > 3 || typeof (ator.altura) != 'number') {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Altura incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else if (ator.biografia == '' || ator.biografia.length > 1000) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Biografia incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else {
+        return false
     }
 }
 

@@ -206,7 +206,7 @@ app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function(request,
     let contentType = request.headers['content-type']
 
     //Chama a função para atualziar o filme e encaminha os dados, o id e o content-type
-    let ator = await controllerGenero.atualizarGenero(dadosBody, idAtor, contentType)
+    let ator = await controllerAtor.atualizarAtor(dadosBody, idAtor, contentType)
 
     response.status(ator.status_code)
     response.json(ator)

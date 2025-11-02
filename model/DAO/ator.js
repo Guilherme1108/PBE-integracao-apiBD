@@ -114,7 +114,7 @@ const setUpdateActor = async function (ator) {
                         data_nascimento     = '${ator.data_nascimento}',
                         data_falescimento   = null,
                         altura              = '${ator.altura}',
-                        biografia           = '${ator.biografia}',
+                        biografia           = '${ator.biografia}'
             
                         WHERE id = ${ator.id};`
 
@@ -132,7 +132,7 @@ const setUpdateActor = async function (ator) {
                         data_nascimento     = '${ator.data_nascimento}',
                         data_falescimento   = '${ator.data_falescimento}',
                         altura              = '${ator.altura}',
-                        biografia           = '${ator.biografia}',
+                        biografia           = '${ator.biografia}'
 
             WHERE id = ${ator.id};`
 
