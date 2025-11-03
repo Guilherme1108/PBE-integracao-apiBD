@@ -37,3 +37,68 @@ INSERT INTO tbl_filme (nome,sinopse,data_lancamento,duracao,orcamento,trailer,ca
 			20000000.00,
 			'https://youtu.be/3UiP4GwWNv0?si=nbOYsfs23rMhkmNx',
 			'https://br.web.img3.acsta.net/c_310_420/img/9c/0f/9c0f6e33b4fafe1a3490b3fe4b4d7cce.jpg');
+            
+
+create table tbl_genero (
+id			int primary key auto_increment not null,
+nome		varchar(80) not null
+);
+
+create table tbl_ator (
+id					int primary key auto_increment not null,
+nome				varchar(100) not null,
+nome_artistico		varchar(100) null,
+data_nascimento		date null,
+data_falescimento	date null,
+altura				decimal (3,2),
+biografia			varchar(500) null
+);
+
+INSERT INTO tbl_ator (nome, nome_artistico, data_nascimento, data_falescimento, altura, biografia)
+VALUES
+('Keanu Charles Reeves', 'Keanu Reeves', '1964-09-02', NULL, 1.86,
+ 'Ator canadense conhecido por papéis marcantes em filmes como Matrix e John Wick. É reconhecido por sua humildade e carisma fora das telas.'),
+
+('Scarlett Ingrid Johansson', 'Scarlett Johansson', '1984-11-22', NULL, 1.60,
+ 'Atriz norte-americana famosa por interpretar a Viúva Negra no Universo Cinematográfico da Marvel, além de papéis em filmes de drama e ficção científica.'),
+
+('Robin Williams', 'Robin Williams', '1951-07-21', '2014-08-11', 1.70,
+ 'Ator e comediante norte-americano premiado com o Oscar. Ficou conhecido por filmes como Gênio Indomável, Sociedade dos Poetas Mortos e Uma Babá Quase Perfeita.');
+
+select * from tbl_ator;
+
+create table tbl_personagem (
+id			INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nome		varchar(200) not null,
+idade		varchar(50) null,
+descricao	varchar(1000),
+papel		varchar(50) not null
+);
+
+INSERT INTO tbl_personagem (nome, idade, descricao, papel)
+VALUES
+('Arthur Pendragon', '35', 'Rei de Camelot, conhecido por sua coragem, sabedoria e pela espada Excalibur. Busca sempre agir com justiça.', 'Protagonista');
+
+INSERT INTO tbl_personagem (nome, idade, descricao, papel)
+VALUES
+('Morgana Le Fay', '28', 'Feiticeira poderosa e irmã de Arthur. Usa sua magia para desafiar o trono e cumprir seus próprios objetivos.', 'Antagonista');
+
+INSERT INTO tbl_personagem (nome, idade, descricao, papel)
+VALUES
+('Merlin', '60', 'Mago sábio que serve como conselheiro e mentor de Arthur. Possui vasto conhecimento sobre o mundo mágico.', 'Coadjuvante');
+
+
+create table tbl_nacionalidade (
+id		INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nome			varchar(50) not null,
+pais_origem		varchar(100) not null
+);
+
+INSERT INTO tbl_nacionalidade (nome, pais_origem)
+VALUES
+('brasileiro', 'Brasil'),
+('argentino', 'Argentina'),
+('canadense', 'Canadá'),
+('japonês', 'Japão'),
+('alemão', 'Alemanha');
+

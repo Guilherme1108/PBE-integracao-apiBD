@@ -33,6 +33,7 @@ const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerAtor = require('./controller/ator/controller_ator.js')
 const controllerPersonagem = require('./controller/personagem/controller_personagem.js')
+const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade')
 
 //EndPoints para a rota de filme
 
@@ -277,6 +278,59 @@ app.delete('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function
 
     response.status(personagem.status_code)
     response.json(personagem)
+})
+
+/*********************CRUD DAS NACIONALIDADES***********************************/
+app.get('/v1/locadora/nacionalidades', cors(), async function(request, response){
+    let nacionalidade = await controllerNacionalidade.listarNacionalidades()
+    response.status(nacionalidade.status_code)
+    response.json(nacionalidade)
+})
+
+app.get('/v1/locadora/nacionalidade/:id', cors(), async function(request, response){
+
+    let idNacionalidade = request.params.id
+
+    let nacionalidade = await controllerNacionalidade.buscarNacionalidadeId(idNacionalidade)
+    response.status(nacionalidade.status_code)
+    response.json(nacionalidade)
+})
+
+app.post('/v1/locadora/nacionalidade', cors(), bodyParserJSON, async function(request, response){
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let nacionalidade = await controllerNacionalidade.inserirNacionalidade(dadosBody, contentType)
+
+    response.status(nacionalidade.status_code)
+    response.json(nacionalidade)
+})
+
+app.put('/v1/locadora/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response){
+    //recebe o id do personagem
+    let idNacionalidade = request.params.id
+
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //Chama a função para atualziar o personagem e encaminha os dados, o id e o content-type
+    let nacionalidade = await controllerNacionalidade.atualizarNacionalidade(dadosBody, idNacionalidade, contentType)
+
+    response.status(nacionalidade.status_code)
+    response.json(nacionalidade)
+})
+
+app.delete('/v1/locadora/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response){
+    let idNacionalidade = request.params.id
+
+    let nacionalidade = await controllerNacionalidade.excluirNacionalidade(idNacionalidade)
+
+    response.status(nacionalidade.status_code)
+    response.json(nacionalidade)
 })
 
 
