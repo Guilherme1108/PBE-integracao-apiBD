@@ -1,0 +1,921 @@
+openapi: 3.0.3
+info:
+  title: Documentação API Locadora
+  description: |-
+   API destinada a controle de filmes.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: gmoreira.souza.dev@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080
+paths:
+
+  /v1/locadora/filme:
+    post:
+      tags:
+        - filme
+      summary: Adiciona um novo filme
+      description: Adiciona um novo Filme
+      requestBody:
+        description: JSON contendo os dados do novo filme a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+        required: true
+      responses:
+        '201':
+          description: Item criado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '415':
+          description: Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!
+  /v1/locadora/filmes:
+    get:
+      tags:
+        - filme
+      summary: Lista todos os filmes
+      description: Listagem de todos os filmes registrados no sistema
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'          
+           
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+  /v1/locadora/filme/{id}:
+    get:
+      tags:
+        - filme
+      summary: Busca um filme pelo ID
+      description: Retorna um aluno pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filme'          
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+    put:
+      tags:
+        - filme
+      summary: Atualiza um filme existente pelo ID
+      description: Atualiza um filme existente pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Atualiza um filme existente pelo iD
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+        required: true
+      responses:
+        '200':
+          description: Item atualizado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+       
+    delete:
+      tags:
+        - filme
+      summary: Deleta um filme
+      description: Excluir um filme pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Item excluido com sucesso!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor
+
+  /v1/locadora/genero:
+    post:
+      tags:
+        - genero
+      summary: Adiciona um novo genero
+      description: Adiciona um novo genero
+      requestBody:
+        description: JSON contendo os dados do novo genero a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+        required: true
+      responses:
+        '201':
+          description: Item criado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '415':
+          description: Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!
+  /v1/locadora/generos:
+    get:
+      tags:
+        - genero
+      summary: Lista todos os generos
+      description: Listagem de todos os generos registrados no sistema
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genero'          
+           
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+  /v1/locadora/genero/{id}:
+    get:
+      tags:
+        - genero
+      summary: Busca um genero pelo ID
+      description: Retorna um genero pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genero'          
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+    put:
+      tags:
+        - genero
+      summary: Atualiza um genero existente pelo ID
+      description: Atualiza um genero existente pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Atualiza um genero existente pelo iD
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+        required: true
+      responses:
+        '200':
+          description: Item atualizado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+       
+    delete:
+      tags:
+        - genero
+      summary: Deleta um genero
+      description: Excluir um genero pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Item excluido com sucesso!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor
+
+  /v1/locadora/ator:
+    post:
+      tags:
+        - ator
+      summary: Adiciona um novo ator
+      description: Adiciona um novo ator
+      requestBody:
+        description: JSON contendo os dados do novo genero a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+        required: true
+      responses:
+        '201':
+          description: Item criado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '415':
+          description: Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!
+  /v1/locadora/atores:
+    get:
+      tags:
+        - ator
+      summary: Lista todos os atores
+      description: Listagem de todos os atores registrados no sistema
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ator'          
+           
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+  /v1/locadora/ator/{id}:
+    get:
+      tags:
+        - ator
+      summary: Busca um ator pelo ID
+      description: Retorna um ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ator'          
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+    put:
+      tags:
+        - ator
+      summary: Atualiza um ator existente pelo ID
+      description: Atualiza um ator existente pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Atualiza um ator existente pelo iD
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+        required: true
+      responses:
+        '200':
+          description: Item atualizado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+       
+    delete:
+      tags:
+        - ator
+      summary: Deleta um ator
+      description: Excluir um ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Item excluido com sucesso!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor
+
+  /v1/locadora/personagem:
+    post:
+      tags:
+        - personagem
+      summary: Adiciona um novo personagem
+      description: Adiciona um novo personagem
+      requestBody:
+        description: JSON contendo os dados do novo personagem a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Personagem'
+        required: true
+      responses:
+        '201':
+          description: Item criado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '415':
+          description: Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!
+  /v1/locadora/personagens:
+    get:
+      tags:
+        - personagem
+      summary: Lista todos os personagens
+      description: Listagem de todos os personagens registrados no sistema
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Personagem'          
+           
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+  /v1/locadora/personagem/{id}:
+    get:
+      tags:
+        - personagem
+      summary: Busca um personagem pelo ID
+      description: Retorna um personagem pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Personagem'          
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+    put:
+      tags:
+        - personagem
+      summary: Atualiza um personagem existente pelo ID
+      description: Atualiza um personagem existente pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Atualiza um personagem existente pelo iD
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Personagem'
+        required: true
+      responses:
+        '200':
+          description: Item atualizado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+       
+    delete:
+      tags:
+        - personagem
+      summary: Deleta um personagem
+      description: Excluir um personagem pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Item excluido com sucesso!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor
+
+  /v1/locadora/nacionalidade:
+    post:
+      tags:
+        - nacionalidade
+      summary: Adiciona uma nova nacionalidade
+      description: Adiciona uma nova nacionalidade
+      requestBody:
+        description: JSON contendo os dados do novo nacionalidade a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nacionalidade'
+        required: true
+      responses:
+        '201':
+          description: Item criado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '415':
+          description: Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!
+  /v1/locadora/nacionalidades:
+    get:
+      tags:
+        - nacionalidade
+      summary: Lista todos as nacionalidades
+      description: Listagem de todos as nacionalidades registradas no sistema
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Nacionalidade'          
+           
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+  /v1/locadora/nacionalidade/{id}:
+    get:
+      tags:
+        - nacionalidade
+      summary: Busca uma nacionalidade pelo ID
+      description: Retorna uma nacionalidade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nacionalidade'          
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+    put:
+      tags:
+        - nacionalidade
+      summary: Atualiza uma nacionalidade existente pelo ID
+      description: Atualiza uma nacionalidade existente pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Atualiza uma nacionalidade existente pelo iD
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nacionalidade'
+        required: true
+      responses:
+        '200':
+          description: Item atualizado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+       
+    delete:
+      tags:
+        - nacionalidade
+      summary: Deleta uma nacionalidade
+      description: Excluir uma nacionalidade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Item excluido com sucesso!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor
+
+  /v1/locadora/dublador:
+    post:
+      tags:
+        - dublador
+      summary: Adiciona um novo dublador
+      description: Adiciona um novo dublador
+      requestBody:
+        description: JSON contendo os dados do novo dublador a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dublador'
+        required: true
+      responses:
+        '201':
+          description: Item criado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '415':
+          description: Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!
+  /v1/locadora/dubladores:
+    get:
+      tags:
+        - dublador
+      summary: Lista todos os dubladores
+      description: Listagem de todos os dubladores registradas no sistema
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dublador'          
+           
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+  /v1/locadora/dublador/{id}:
+    get:
+      tags:
+        - dublador
+      summary: Busca um dublador pelo ID
+      description: Retorna um dublador pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Requisição bem sucedida!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dublador'          
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+    put:
+      tags:
+        - dublador
+      summary: Atualiza um dublador existente pelo ID
+      description: Atualiza um dublador existente pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Atualiza uma nacionalidade existente pelo iD
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dublador'
+        required: true
+      responses:
+        '200':
+          description: Item atualizado com sucesso!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+       
+    delete:
+      tags:
+        - dublador
+      summary: Deleta um dublador
+      description: Excluir um dublador pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Item excluido com sucesso!
+        '400':
+          description: Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados e atendidos conforme documenetação!
+        '404':
+          description: Não foram encontrados dados de retorno!
+        '500':
+          description: Não foi possível processar a requisição devido a erros internos no servidor
+components:
+  schemas:
+    Filme:
+      required:
+        - nome
+        - duracao
+        - orcamento
+        - capa
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          maxLength: 100
+        sinopse:
+          type: string
+          format: text
+        data_lancamento:
+          type: string
+          format: date
+        duracao:
+          type: string
+        orcamento:
+          type: number 
+          format: decimal
+          multipleOf: 0.01
+          maximum: 999999999.99
+        trailer:
+          type: string
+          maxLength: 200
+        capa:
+          type: string
+          maxLength: 200
+
+    Genero:
+      required:
+        - nome
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          maxLength: 80
+          
+    Ator:
+      required:
+        - nome
+        - data_nascimento
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          maxLength: 100
+        nome_artistico:
+          type: string
+          maxLength: 100
+        data_nascimento:
+          type: string
+          format: date
+        data_falescimento:
+          type: string
+          format: date
+        altura:
+          type: number 
+          format: decimal
+          multipleOf: 0.01
+          maximum: 99.99
+        biografia:
+          type: string
+          maxLength: 1000
+
+    Personagem:
+      required:
+        - nome
+        - papel
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          maxLength: 200
+        idade:
+          type: string
+          maxLength: 50
+        descricao:
+          type: string
+          maxLength: 1000
+        papel:
+          type: string
+          maxLength: 50
+
+    Nacionalidade:
+      required:
+        - nome
+        - papel
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          maxLength: 50
+        pais_origem:
+          type: string
+          maxLength: 100
+
+    Dublador:
+      required:
+        - nome
+        - data_nascimento
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          maxLength: 100
+        data_nascimento:
+          type: string
+          format: date
+        data_falescimento:
+          type: string
+          format: date
+
+  requestBodies:
+    Filme:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Filme'
+
+    Genero:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Genero'
+
+    Ator:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Ator'
+
+    Personagem:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Personagem'
+
+    Nacionalidade:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Nacionalidade'
+
+    Dublador:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Dublador'
