@@ -34,6 +34,7 @@ const generoRoutes = require('./routes/router_genero.js')
 const atorRoutes = require('./routes/router_ator.js')
 const personagemRoutes = require('./routes/router_personagem.js')
 const nacionalidadeRoutes = require('./routes/router_nacionalidade.js')
+const dubladorRoutes = require('./routes/router_dublador.js')
 
 // Usando rotas
 app.use(filmeRoutes)
@@ -41,6 +42,7 @@ app.use(generoRoutes)
 app.use(atorRoutes)
 app.use(personagemRoutes)
 app.use(nacionalidadeRoutes)
+app.use(dubladorRoutes)
 
 app.listen(PORT, function(){
     console.log('API Aguardando Requisições🏎️')

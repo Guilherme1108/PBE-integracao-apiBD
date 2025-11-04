@@ -102,3 +102,16 @@ VALUES
 ('japonês', 'Japão'),
 ('alemão', 'Alemanha');
 
+create table tbl_dublador (
+	id					INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome				varchar(100) not null,
+	data_nascimento 	date not null,
+	data_falescimento	date null
+);
+
+INSERT INTO tbl_dublador (nome, data_nascimento, data_falescimento) VALUES
+('Orlando Drummond', '1919-10-18', '2021-07-27'),
+('Wendel Bezerra', '1974-06-18', NULL),
+('Mário Jorge Andrade', '1954-03-14', NULL),
+('Isaac Bardavid', '1931-02-13', '2022-02-01'),
+('Guilherme Briggs', '1970-07-25', NULL);
