@@ -1,3 +1,10 @@
+/****************************************************************************************
+ * Objetivo: Arquivo responsavel pelo gerenciamento das rotas da API referente aos personagens
+ * Data: 03/11/2025
+ * Autor: Guilherme Moreira
+ * Versão: 1.0
+*****************************************************************************************/
+
 const express = require('express')
 const router = express.Router()
 const cors = require('cors')
