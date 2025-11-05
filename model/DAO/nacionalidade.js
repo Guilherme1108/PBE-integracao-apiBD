@@ -48,7 +48,7 @@ const getSelectNationalityById = async function (id) {
     }
 }
 
-const getSelectLastId = async function (id) {
+const getSelectLastId = async function () {
     try {
         let sql = `select id from tbl_nacionalidade order by id desc limit 1`
 

@@ -15,7 +15,7 @@ const prisma = new PrismaClient()
 const getSelectAllGender = async function () {
     try {
         //Script SQL
-        let sql = `select * from tbl_genero order by nome asc`
+        let sql = `select * from tbl_genero order by id desc`
 
         //Encaminha para o BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql) //Unsafe signfica que é sem segurança
@@ -48,7 +48,7 @@ const getSelectGenderById = async function (id) {
     }
 }
 
-const getSelectLastId = async function (id) {
+const getSelectLastId = async function () {
     try {
         let sql = `select id from tbl_genero order by id desc limit 1`
 

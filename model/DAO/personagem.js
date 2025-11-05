@@ -43,7 +43,7 @@ const getSelectCharactorById = async function (id) {
     }
 }
 
-const getSelectLastId = async function (id) {
+const getSelectLastId = async function () {
     try {
         let sql = `select id from tbl_personagem order by id desc limit 1`
 

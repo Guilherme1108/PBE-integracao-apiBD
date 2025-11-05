@@ -43,7 +43,7 @@ const getSelectActorVoiceById = async function (id) {
     }
 }
 
-const getSelectLastId = async function (id) {
+const getSelectLastId = async function () {
     try {
         let sql = `select id from tbl_dublador order by id desc limit 1`
 
