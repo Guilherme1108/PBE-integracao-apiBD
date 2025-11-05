@@ -15,7 +15,7 @@ const prisma = new PrismaClient()
 const getSelectAllNationality = async function () {
     try {
         //Script SQL
-        let sql = `select * from tbl_nacionalidade order by nome asc`
+        let sql = `select * from tbl_nacionalidade order by id desc`
 
         //Encaminha para o BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql) //Unsafe signfica que é sem segurança

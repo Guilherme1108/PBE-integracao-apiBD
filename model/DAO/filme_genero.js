@@ -33,7 +33,7 @@ const getSelectAllMoviesGenres = async function () {
 }
 
 //Retorna uma lista de generos filtrando pelo id
-const getSelectGenreById = async function (id) {
+const getSelectByIdMoviesGenres = async function (id) {
     try {
         let sql = `select * from tbl_filme_genero where id=${id}`
 
@@ -166,7 +166,7 @@ const setDeleteMoviesGenres = async function (id) {
 
 module.exports = {
     getSelectAllMoviesGenres,
-    getSelectGenreById,
+    getSelectByIdMoviesGenres,
     getSelectGenresByIdMovies,
     getSelectMoviesByIdGenre,
     getSelectLastId,
