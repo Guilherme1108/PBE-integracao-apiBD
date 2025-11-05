@@ -115,3 +115,20 @@ INSERT INTO tbl_dublador (nome, data_nascimento, data_falescimento) VALUES
 ('Mário Jorge Andrade', '1954-03-14', NULL),
 ('Isaac Bardavid', '1931-02-13', '2022-02-01'),
 ('Guilherme Briggs', '1970-07-25', NULL);
+
+-- Tabela relacionamento
+create table tbl_filme_genero (
+	id				INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    id_filme		INT NOT NULL,
+    id_genero		INT NOT NULL,
+    
+    constraint FK_FILME_FILME_GENERO 	# Nome da relação
+    foreign key (id_filme) 				# Qual a chave estrangeira
+    references tbl_filme (id),			# De onde vem a FK
+    
+    constraint FK_GENERO_FILME_GENERO 
+    foreign key (id_genero) 
+    references tbl_genero (id)
+);
+
+select * from tbl_filme_genero;

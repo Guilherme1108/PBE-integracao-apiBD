@@ -193,6 +193,7 @@ const excluirDublador = async (id) => {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                 MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+                delete MESSAGES.DEFAULT_HEADER.items
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {

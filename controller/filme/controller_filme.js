@@ -2,10 +2,14 @@
  * Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de filmes
  * Data: 07/10/2025
  * Autor: Guilherme Moreira
- * Versão: 1.0
+ * Versão: 1.0 (CRUD básico do filme, sem as relações com outras tabelas)
+ * Versão: 1.1 (CRUD do filme com relacionamento com a tabela genero) 
 *******************************************************************************************************/
 //Import da model do DAO do filme     
 const filmeDAO = require('../../model/DAO/filme.js')
+
+//Import da model da controller de relação entre filme e genero 
+const controllerFilmeGenero = require('./controller_filme_genero.js')
 
 //Import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
@@ -97,6 +101,17 @@ const inserirFilme = async (filme, contentType) => {
                     //Chama a função para receber o ID gerado no BD
                     let lastId = await filmeDAO.getSelectLastId()
                     if (lastId) {
+
+                        //Processar a inserção dos dados na tabela de relação
+                        //entre Filme e Genero
+                        filme.genero.forEach(async function(genero){
+                            let filmeGenero = {id_filme: lastId, id_genero: genero.id}
+                            let resultFilmesGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero)
+                        })
+
+
+
+
                         //Adiciona o ID no JSON com os dados do filme
                         filme.id = lastId
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
@@ -205,6 +220,7 @@ const excluirFilme = async (id) => {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                 MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+                delete MESSAGES.DEFAULT_HEADER.items
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
