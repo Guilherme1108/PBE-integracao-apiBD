@@ -27,6 +27,14 @@ const listarFilmes = async () => {
 
         if (resultFilmes) {
             if (resultFilmes.length > 0) {
+
+                //filme é um objeto criado agora
+                for(filme of resultFilmes) {
+                    let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+                    if(resultGeneros.status_code == 200)
+                    filme.genero = resultGeneros.items.filme_genero
+                }
+
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes
@@ -56,6 +64,15 @@ const BuscarFilmeId = async (id) => {
 
             if (resultFilmes) {
                 if (resultFilmes.length > 0) {
+                    let resultFilmesGenero = await controllerFilmeGenero.listarGenerosIdFilme(id)
+
+                    if (resultFilmesGenero.status_code == 200) {
+                        resultFilmes[0].genero = resultFilmesGenero.items.filme_genero
+
+                    } else {
+                        resultFilmes[0].genero = 'Gênero não informado'
+                    }
+
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.filme = resultFilmes
@@ -105,16 +122,16 @@ const inserirFilme = async (filme, contentType) => {
                         //Processar a inserção dos dados na tabela de relação
                         //entre Filme e Genero
                         // filme.genero.forEach(async function(genero){
-                        for(genero of filme.genero){
-                            
-                            let filmeGenero =   {
-                                                    id_filme: lastId,
-                                                    id_genero: genero.id
-                                                }
+                        for (genero of filme.genero) {
+
+                            let filmeGenero = {
+                                id_filme: lastId,
+                                id_genero: genero.id
+                            }
 
                             let resultFilmesGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
 
-                            if(resultFilmesGenero.status_code != 201)
+                            if (resultFilmesGenero.status_code != 201)
                                 return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação
                         }
 
@@ -127,7 +144,8 @@ const inserirFilme = async (filme, contentType) => {
 
                         //Processamento para trazer dados dos generos cadastrados na tabela de relaçao
                         delete filme.genero
-                        //Pesquisa o ID quais os generos e os seus dados que foram inseridos na tabela relação
+
+                        //Pesquisa no BD quais os generos e os seus dados que foram inseridos na tabela relação
                         let resultGenerosFilme = await controllerFilmeGenero.listarGenerosIdFilme(lastId)
 
                         //Adiciona momentaneamente o atributi genero com todas as informações do genero (ID, filme)
@@ -258,7 +276,7 @@ const excluirFilme = async (id) => {
 const validarDadosFilme = async function (filme) {
 
     //Criando um onjeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     //Validação de todas as entradas de dados
     if (filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.nome.length > 100) {
