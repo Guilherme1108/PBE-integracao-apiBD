@@ -104,12 +104,19 @@ const inserirFilme = async (filme, contentType) => {
 
                         //Processar a inserção dos dados na tabela de relação
                         //entre Filme e Genero
-                        filme.genero.forEach(async function(genero){
-                            let filmeGenero = {id_filme: lastId, id_genero: genero.id}
-                            let resultFilmesGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero)
-                        })
+                        // filme.genero.forEach(async function(genero){
+                        for(genero of filme.genero){
+                            
+                            let filmeGenero =   {
+                                                    id_filme: lastId,
+                                                    id_genero: genero.id
+                                                }
 
+                            let resultFilmesGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
 
+                            if(resultFilmesGenero.status_code != 201)
+                                return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação
+                        }
 
 
                         //Adiciona o ID no JSON com os dados do filme
@@ -117,6 +124,16 @@ const inserirFilme = async (filme, contentType) => {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+
+                        //Processamento para trazer dados dos generos cadastrados na tabela de relaçao
+                        delete filme.genero
+                        //Pesquisa o ID quais os generos e os seus dados que foram inseridos na tabela relação
+                        let resultGenerosFilme = await controllerFilmeGenero.listarGenerosIdFilme(lastId)
+
+                        //Adiciona momentaneamente o atributi genero com todas as informações do genero (ID, filme)
+                        filme.genero = resultGenerosFilme.items.filme_genero
+
+
                         MESSAGES.DEFAULT_HEADER.items = filme
 
                         return MESSAGES.DEFAULT_HEADER //201
