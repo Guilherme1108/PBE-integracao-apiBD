@@ -44,6 +44,13 @@ id			int primary key auto_increment not null,
 nome		varchar(80) not null
 );
 
+INSERT INTO tbl_genero (nome) VALUES
+('Ação'),
+('Comédia'),
+('Drama'),
+('Ficção Científica'),
+('Terror');
+
 create table tbl_ator (
 id					int primary key auto_increment not null,
 nome				varchar(100) not null,
@@ -132,3 +139,17 @@ create table tbl_filme_genero (
 );
 
 select * from tbl_filme_genero;
+
+create table tbl_ator_genero (
+	id					INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    id_ator				INT NOT NULL,
+	id_nacionalidade	INT NOT NULL,
+    
+    constraint FK_ATOR_ATOR_NACIONALIDADE
+    foreign key (id_ator)
+    references tbl_ator (id),
+    
+    constraint FK_GENERO_ATOR_NACIONALIDADE
+	foreign key (id_nacionalidade)
+    references tbl_ator (id)
+);

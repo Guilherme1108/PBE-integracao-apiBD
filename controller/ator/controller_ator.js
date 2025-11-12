@@ -3,10 +3,14 @@
  * Data: 29/10/2025
  * Autor: Guilherme Moreira
  * Versão: 1.0
+ * Versão: 1.1 (CRUD do ator com relacionamento com a tabela nacionalidade) 
 *******************************************************************************************************/
 
 //Import da model do DAO do genero    
 const atorDAO = require('../../model/DAO/ator.js')
+
+//Import da model da controller de relação entre ator e nacionalidade
+const controllerAtorNacionalidade = require('./controller_ator_nacionalidade.js')
 
 //Import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')

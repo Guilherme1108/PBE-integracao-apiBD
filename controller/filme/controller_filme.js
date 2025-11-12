@@ -225,6 +225,7 @@ const atualizarFilme = async (filme, id, contentType) => {
                                     return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação
                             }
                         } else {
+                            MESSAGES.ERROR_RELATION_TABLE.message = 'ouveram problemas na tabela de relacionamento!'
                             return MESSAGES.ERROR_RELATION_TABLE
                         }
 
@@ -274,6 +275,7 @@ const excluirFilme = async (id) => {
 
             if (deletarGenero.status_code == 500) {
 
+                MESSAGES.ERROR_RELATION_TABLE.message = 'ouveram problemas na tabela de relacionamento!'
                 return MESSAGES.ERROR_RELATION_TABLE
 
             } else {
