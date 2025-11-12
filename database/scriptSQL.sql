@@ -140,7 +140,7 @@ create table tbl_filme_genero (
 
 select * from tbl_filme_genero;
 
-create table tbl_ator_genero (
+create table tbl_ator_nacionalidade (
 	id					INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     id_ator				INT NOT NULL,
 	id_nacionalidade	INT NOT NULL,
@@ -153,3 +153,6 @@ create table tbl_ator_genero (
 	foreign key (id_nacionalidade)
     references tbl_ator (id)
 );
+
+INSERT INTO tbl_ator_nacionalidade (id_ator, id_nacionalidade) VALUES
+(1, 2);
