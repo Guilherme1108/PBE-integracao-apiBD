@@ -50,6 +50,23 @@ const getSelectByIdMoviesGenres = async function (id) {
 }
 
 //Retorna uma lista de generos filtrando pelo id do filme
+const getSelectMoviesGenresByIdFilme = async function (id_filme) {
+    try {
+        let sql = `select * from tbl_filme_genero where id_filme =${id_filme}`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result))
+            return result
+        else
+            return false
+
+    } catch (error) {
+        return false
+    }
+}
+
+//Retorna uma lista de generos filtrando pelo id do filme
 const getSelectGenresByIdMovies = async function (id_filme) {
     try {
         let sql = `select tbl_genero.id, tbl_genero.nome
@@ -161,16 +178,33 @@ const setDeleteMoviesGenres = async function (id) {
     } catch (error) {
         return false
     }
-    
+
+}
+const setDeleteMoviesGenresByIdMovies = async function (id_filme) {
+    try {
+        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme = ${id_filme};`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+        else
+            return false
+        
+    } catch (error) {
+        return false
+    }
 }
 
 module.exports = {
     getSelectAllMoviesGenres,
     getSelectByIdMoviesGenres,
+    getSelectMoviesGenresByIdFilme,
     getSelectGenresByIdMovies,
     getSelectMoviesByIdGenre,
     getSelectLastId,
     setInsertMoviesGenres,
     setUpdateMoviesGenres,
-    setDeleteMoviesGenres
+    setDeleteMoviesGenres,
+    setDeleteMoviesGenresByIdMovies
 }

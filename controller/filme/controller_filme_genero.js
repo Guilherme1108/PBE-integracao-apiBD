@@ -74,6 +74,38 @@ const buscarFilmeGeneroId = async (id) => {
     }
 }
 
+//Retorna um filme genero especifico pelo id fo filme
+const buscarFilmeGeneroPorIdFilme = async (id) => {
+    //Criando um objeto novo para as mensagens
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+        if (!isNaN(id) && id != '' && id != null && id > 0) {
+            let resultFilmesGeneros = await filmeGeneroDAO.getSelectMoviesGenresByIdFilme(Number(id))
+
+            if (resultFilmesGeneros) {
+                if (resultFilmesGeneros.length > 0) {
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+
+                    return MESSAGES.DEFAULT_HEADER //200
+                } else {
+                    return MESSAGES.ERROR_NOT_FOUND //404
+                }
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
+            }
+        } else {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 //Retorna generos filtrando pelo id do filme
 const listarGenerosIdFilme = async (idFilme) => {
     //Criando um objeto novo para as mensagens
@@ -259,6 +291,38 @@ const excluirFilmeGenero = async (id) => {
     }
 }
 
+const excluirFilmeGeneroPorIdFilme = async (id_filme) => {
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+
+        let validarId = await buscarFilmeGeneroPorIdFilme(id_filme)
+
+        if (validarId.status_code == 200) {
+
+            id_filme = Number(id_filme)
+
+            let resultFilmeGenero = await filmeGeneroDAO.setDeleteMoviesGenresByIdMovies(id_filme)
+
+            if (resultFilmeGenero) {
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+                delete MESSAGES.DEFAULT_HEADER.items
+
+                return MESSAGES.DEFAULT_HEADER //200
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            return validarId // 400 / 404 / 500
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 const validarDadosFilmeGenero = async function (filmeGenero) {
 
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -284,5 +348,6 @@ module.exports = {
     listarFilmesIdGenero,
     inserirFilmeGenero,
     atualizarFilmeGenero,
-    excluirFilmeGenero
+    excluirFilmeGenero,
+    excluirFilmeGeneroPorIdFilme
 }

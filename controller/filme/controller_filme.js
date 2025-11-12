@@ -205,6 +205,26 @@ const atualizarFilme = async (filme, id, contentType) => {
                     let resultFilmes = await filmeDAO.setUpdateMovies(filme)
 
                     if (resultFilmes) {
+
+                        let excluirFilmeGenero = await controllerFilmeGenero.excluirFilmeGeneroPorIdFilme(id)
+                        // console.log(excluirFilmeGenero)
+
+                        if (excluirFilmeGenero.status_code == 200) {
+
+                            for (genero of filme.genero) {
+
+                                let filmeGenero = {
+                                    id_filme: id,
+                                    id_genero: genero.id
+                                }
+    
+                                let resultFilmesGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+    
+                                if (resultFilmesGenero.status_code != 201)
+                                    return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação
+                            }
+                        }
+
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
@@ -248,7 +268,7 @@ const excluirFilme = async (id) => {
             id = Number(id)
 
             //Processamento
-            //Chama a função para atualizar um novo filme no BD
+            //Chama a função para excluir um novo filme no BD
             let resultFilmes = await filmeDAO.setDeleteMovies(id)
 
             if (resultFilmes) {
