@@ -27,9 +27,9 @@ const listarAtores = async () => {
             if (resultAtor.length > 0) {
 
                 for (ator of resultAtor) {
-                    let resultNacionalidades = await controllerAtorNacionalidade.listar(filme.id)
+                    let resultNacionalidades = await controllerAtorNacionalidade.listarNacionalidadesIdAtor(ator.id)
                     if (resultNacionalidades.status_code == 200)
-                        filme.genero = resultNacionalidades.items.filme_genero
+                        ator.nacionalidade = resultNacionalidades.items.ator_nacionalidade
                 }
 
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
@@ -58,6 +58,15 @@ const buscarAtorId = async (id) => {
 
             if (resultAtor) {
                 if (resultAtor.length > 0) {
+                    let resultAtoresNacionalidades = await controllerAtorNacionalidade.listarNacionalidadesIdAtor(id)
+
+                    if (resultAtoresNacionalidades.status_code == 200) {
+                        resultAtor[0].nacionalidade = resultAtoresNacionalidades.items.ator_nacionalidade
+
+                    } else {
+                        resultAtor[0].nacionalidade = 'Nacionalidade não informado'
+                    }
+
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.ator = resultAtor
@@ -93,6 +102,31 @@ const inserirAtor = async (ator, contentType) => {
                 if (resultAtor) {
                     let lastId = await atorDAO.getSelectLastId()
                     if (lastId) {
+
+                        if (ator.nacionalidade != undefined) {
+                            for (nacionalidade of ator.nacionalidade) {
+
+                                let atorNacionalidade = {
+                                    id_ator: lastId,
+                                    id_nacionalidade: nacionalidade.id
+                                }
+
+                                let resultAtoresNacionalidades = await controllerAtorNacionalidade.inserirAtorNacionalidade(atorNacionalidade, contentType)
+
+                                if (resultAtoresNacionalidades.status_code != 201)
+                                    return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação
+                            }
+
+                            //Processamento para trazer dados dos generos cadastrados na tabela de relaçao
+                            delete ator.nacionalidade
+
+                            //Pesquisa no BD quais os generos e os seus dados que foram inseridos na tabela relação
+                            let resultNacionalidadesAtor = await controllerAtorNacionalidade.listarNacionalidadesIdAtor(lastId)
+
+                            //Adiciona momentaneamente o atributi genero com todas as informações do genero (ID, filme)
+                            ator.nacionalidade = resultNacionalidadesAtor.items.ator_nacionalidade
+                        }
+
                         ator.id = lastId
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
@@ -142,6 +176,28 @@ const atualizarAtor = async (ator, id, contentType) => {
                     let resultAtor = await atorDAO.setUpdateActor(ator)
 
                     if (resultAtor) {
+
+                        let excluirAtorNacionalidade = await controllerAtorNacionalidade.excluirAtorNacionalidadePorIdAtor(id)
+
+                        if (ator.nacionalidade != undefined && ator.nacionalidade.length > 0) {
+
+                            for (nacionalidade of ator.nacionalidade) {
+
+                                let atorNacionalidade = {
+                                    id_ator: id,
+                                    id_nacionalidade: nacionalidade.id
+                                }
+
+                                let resultAtoresNacionalidades = await controllerAtorNacionalidade.inserirAtorNacionalidade(atorNacionalidade, contentType)
+
+                                if (resultAtoresNacionalidades.status_code != 201)
+                                    return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação
+                            }
+                        } else {
+                            MESSAGES.ERROR_RELATION_TABLE.message = 'ouveram problemas na tabela de relacionamento!'
+                            return MESSAGES.ERROR_RELATION_TABLE
+                        }
+
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
@@ -179,63 +235,73 @@ const excluirAtor = async (id) => {
 
             id = Number(id)
 
-            let resultAtor = await atorDAO.setDeleteActor(id)
+            let deletarNacionalidade = await controllerAtorNacionalidade.excluirAtorNacionalidadePorIdAtor(id)
 
-            if (resultAtor) {
-                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
-                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
-                delete MESSAGES.DEFAULT_HEADER.items
+            if (deletarNacionalidade.status_code == 500) {
 
-                return MESSAGES.DEFAULT_HEADER //200
+                MESSAGES.ERROR_RELATION_TABLE.message = 'ouveram problemas na tabela de relacionamento!'
+                return MESSAGES.ERROR_RELATION_TABLE
+
             } else {
-                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
-            }
-        } else {
-            return validarId // 400 / 404 / 500
-        }
 
-    } catch (error) {
-        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+                let resultAtor = await atorDAO.setDeleteActor(id)
+
+                if (resultAtor) {
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                    MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+                    delete MESSAGES.DEFAULT_HEADER.items
+
+                    return MESSAGES.DEFAULT_HEADER //200
+                } else {
+                    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                }
+            }
+            } else {
+                return validarId // 400 / 404 / 500
+            }
+
+        } catch (error) {
+            return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+        }
     }
-}
 
 //Validação dos dados de cadastros e atualização do ator
 const validarDadosAtor = async function (ator) {
 
-    //Criando um onjeto novo para as mensagens
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+        //Criando um onjeto novo para as mensagens
+        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
-    //Validação de todas as entradas de dados
-    if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        //Validação de todas as entradas de dados
+        if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.nome_artistico.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        } else if (ator.nome_artistico.length > 100) {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data nascimento incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data nascimento incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.altura == '' || ator.altura == undefined || ator.altura == null || ator.altura.length > 3 || typeof (ator.altura) != 'number') {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Altura incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        } else if (ator.altura == '' || ator.altura == undefined || ator.altura == null || ator.altura.length > 3 || typeof (ator.altura) != 'number') {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Altura incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (ator.biografia == '' || ator.biografia.length > 1000) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Biografia incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        } else if (ator.biografia == '' || ator.biografia.length > 1000) {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Biografia incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else {
-        return false
+        } else {
+            return false
+        }
     }
-}
 
-module.exports = {
-    listarAtores,
-    buscarAtorId,
-    inserirAtor,
-    atualizarAtor,
-    excluirAtor
-}
+    module.exports = {
+        listarAtores,
+        buscarAtorId,
+        inserirAtor,
+        atualizarAtor,
+        excluirAtor
+    }

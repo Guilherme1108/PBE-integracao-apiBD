@@ -76,7 +76,7 @@ const buscarAtorNacionalidadeId = async (id) => {
     }
 }
 
-//Retorna um filme genero especifico pelo id fo filme
+//Retorna um ator nacionalidade especifico pelo id fo filme
 const buscarAtorNacionalidadePorIdAtor = async (id) => {
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -122,7 +122,7 @@ const listarNacionalidadesIdAtor = async (idAtor) => {
                 if (resultAtoresNacionalidades.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultAtoresNacionalidades
+                    MESSAGES.DEFAULT_HEADER.items.ator_nacionalidade = resultAtoresNacionalidades
 
                     return MESSAGES.DEFAULT_HEADER //200
                 } else {
@@ -174,25 +174,25 @@ const listarAtoresIdNacionalidade = async (idNacionalidade) => {
 }
 
 //Inserir um novo genero
-const inserirFilmeGenero = async (filmeGenero, contentType) => {
+const inserirAtorNacionalidade= async (atorNacionalidade, contentType) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
         //validação do tipo de conteúdo
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            let validar = await validarDadosFilmeGenero(filmeGenero)
+            let validar = await validarDadosAtorNacionalidade(atorNacionalidade)
 
             if (!validar) {
-                let resultFilmeGenero = await filmeGeneroDAO.setInsertMoviesGenres(filmeGenero)
+                let resultAtorNacionalidade = await atorNacionalidadeDAO.setInsertActorNationality(atorNacionalidade)
 
-                if (resultFilmeGenero) {
-                    let lastId = await filmeGeneroDAO.getSelectLastId()
+                if (resultAtorNacionalidade) {
+                    let lastId = await atorNacionalidadeDAO.getSelectLastId()
                     if (lastId) {
-                        filmeGenero.id = lastId
+                        atorNacionalidade.id = lastId
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items = filmeGenero
+                        MESSAGES.DEFAULT_HEADER.items = atorNacionalidade
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -215,7 +215,7 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
     }
 }
 
-const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
+const atualizarAtorNacionalidade = async (atorNacionalidade, id, contentType) => {
 
     //Criando um onjeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -223,23 +223,23 @@ const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validar = await validarDadosFilmeGenero(filmeGenero)
+            let validar = await validarDadosAtorNacionalidade(atorNacionalidade)
 
             if (!validar) {
 
-                let validarID = await buscarFilmeGeneroId(id)
+                let validarID = await buscarAtorNacionalidadeId(id)
 
                 if (validarID.status_code == 200) {
 
-                    filmeGenero.id = Number(id)
+                    atorNacionalidade.id = Number(id)
 
-                    let resultFilmeGenero = await filmeGeneroDAO.setUpdateMoviesGenres(filmeGenero)
+                    let resultAtorNacionalidade = await atorNacionalidadeDAO.setUpdateActorNationality(atorNacionalidade)
 
-                    if (resultFilmeGenero) {
+                    if (resultAtorNacionalidade) {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.filme_genero = filmeGenero
+                        MESSAGES.DEFAULT_HEADER.items.ator_nacionalidade = atorNacionalidade
 
                         return MESSAGES.DEFAULT_HEADER //200
                     } else {
@@ -262,20 +262,20 @@ const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
     }
 }
 
-const excluirFilmeGenero = async (id) => {
+const excluirAtorNacionalidade = async (id) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
 
-        let validarId = await buscarFilmeGeneroId(id)
+        let validarId = await buscarAtorNacionalidadeId(id)
 
         if (validarId.status_code == 200) {
 
             id = Number(id)
 
-            let resultFilmeGenero = await filmeGeneroDAO.setDeleteMoviesGenres(id)
+            let resultAtorNacionalidade = await atorNacionalidadeDAO.setDeleteActorNationality(id)
 
-            if (resultFilmeGenero) {
+            if (resultAtorNacionalidade) {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                 MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
@@ -294,20 +294,20 @@ const excluirFilmeGenero = async (id) => {
     }
 }
 
-const excluirFilmeGeneroPorIdFilme = async (id_filme) => {
+const excluirAtorNacionalidadePorIdAtor = async (id_ator) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
 
-        let validarId = await buscarFilmeGeneroPorIdFilme(id_filme)
+        let validarId = await buscarAtorNacionalidadePorIdAtor(id_ator)
 
         if (validarId.status_code == 200) {
 
-            id_filme = Number(id_filme)
+            id_ator = Number(id_ator)
 
-            let resultFilmeGenero = await filmeGeneroDAO.setDeleteMoviesGenresByIdMovies(id_filme)
+            let resultAtorNacionalidade = await atorNacionalidadeDAO.setDeleteActorNationalityByIdActor(id_ator)
 
-            if (resultFilmeGenero) {
+            if (resultAtorNacionalidade) {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                 MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
@@ -326,17 +326,17 @@ const excluirFilmeGeneroPorIdFilme = async (id_filme) => {
     }
 }
 
-const validarDadosFilmeGenero = async function (filmeGenero) {
+const validarDadosAtorNacionalidade = async function (atorNacionalidade) {
 
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     //validação
-    if (filmeGenero.id_filme <= 0 || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Id_filme incorreto!]'
+    if (atorNacionalidade.id_ator <= 0 || isNaN(atorNacionalidade.id_ator) || atorNacionalidade.id_ator == '' || atorNacionalidade.id_ator == undefined || atorNacionalidade.id_ator == null) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[id_ator incorreto!]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (filmeGenero.id_genero <= 0 || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null) {
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Id_genero incorreto!]'
+    } else if (atorNacionalidade.id_nacionalidade <= 0 || isNaN(atorNacionalidade.id_nacionalidade) || atorNacionalidade.id_nacionalidade == '' || atorNacionalidade.id_nacionalidade == undefined || atorNacionalidade.id_nacionalidade == null) {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[id_nacionalidade incorreto!]'
             return MESSAGES.ERROR_REQUIRED_FIELDS
     } else {
         return false
@@ -349,8 +349,8 @@ module.exports = {
     buscarAtorNacionalidadeId,
     listarNacionalidadesIdAtor,
     listarAtoresIdNacionalidade,
-    inserirFilmeGenero,
-    atualizarFilmeGenero,
-    excluirFilmeGenero,
-    excluirFilmeGeneroPorIdFilme
+    inserirAtorNacionalidade,
+    atualizarAtorNacionalidade,
+    excluirAtorNacionalidade,
+    excluirAtorNacionalidadePorIdAtor
 }

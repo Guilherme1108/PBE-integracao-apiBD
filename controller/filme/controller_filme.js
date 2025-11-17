@@ -68,9 +68,6 @@ const BuscarFilmeId = async (id) => {
 
                     if (resultFilmesGenero.status_code == 200) {
                         resultFilmes[0].genero = resultFilmesGenero.items.filme_genero
-
-                    } else {
-                        resultFilmes[0].genero = 'Gênero não informado'
                     }
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
@@ -210,7 +207,7 @@ const atualizarFilme = async (filme, id, contentType) => {
                         let excluirFilmeGenero = await controllerFilmeGenero.excluirFilmeGeneroPorIdFilme(id)
                         // console.log(excluirFilmeGenero)
 
-                        if (excluirFilmeGenero.status_code == 200) {
+                        if (filme.genero != undefined && filme.genero.length > 0) {
 
                             for (genero of filme.genero) {
 
@@ -220,6 +217,7 @@ const atualizarFilme = async (filme, id, contentType) => {
                                 }
 
                                 let resultFilmesGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                                // console.log(resultFilmesGenero)
 
                                 if (resultFilmesGenero.status_code != 201)
                                     return MESSAGES.ERROR_RELATION_TABLE //200 porem com problemas na tabela de relação

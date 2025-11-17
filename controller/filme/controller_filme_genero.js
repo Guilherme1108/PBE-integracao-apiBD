@@ -173,6 +173,7 @@ const listarFilmesIdGenero = async (idGenero) => {
 //Inserir um novo genero
 const inserirFilmeGenero = async (filmeGenero, contentType) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    console.log(filmeGenero)
 
     try {
         //validação do tipo de conteúdo
@@ -301,6 +302,7 @@ const excluirFilmeGeneroPorIdFilme = async (id_filme) => {
         if (validarId.status_code == 200) {
 
             id_filme = Number(id_filme)
+            // console.log(id_filme) FUNCIONANDO
 
             let resultFilmeGenero = await filmeGeneroDAO.setDeleteMoviesGenresByIdMovies(id_filme)
 
@@ -310,6 +312,7 @@ const excluirFilmeGeneroPorIdFilme = async (id_filme) => {
                 MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
                 delete MESSAGES.DEFAULT_HEADER.items
 
+                // console.log(MESSAGES.DEFAULT_HEADER) FUNCIONANDO
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
