@@ -52,7 +52,7 @@ const getSelectByIdActorsNationality = async function (id) {
 // //Retorna uma lista de generos filtrando pelo id do filme
 const getSelectActorsNationalityByIdAtor = async function (id_ator) {
     try {
-        let sql = `select * from tbl_ator_nacionalidade where id_filme =${id_ator}`
+        let sql = `select * from tbl_ator_nacionalidade where id_ator =${id_ator}`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
@@ -89,122 +89,122 @@ const getSelectNationalityByIdActor = async function (id_ator) {
     }
 }
 
-// //Retorna uma lista de filmes filtrando pelo id do genero
-// const getSelectMoviesByIdGenre = async function (id_genero) {
-//     try {
-//         let sql = `select tbl_filme.id, tbl_filme.nome
-//                         from tbl_filme 
-//                                 inner join tbl_filme_genero
-//                                 on tbl_filme.id = tbl_filme_genero.id_filme
-//                                 inner join tbl_genero
-//                                 on tbl_genero.id = tbl_filme_genero.id_genero
-//                         where tbl_genero.id = ${id_genero}`
+// //Retorna uma lista de atores filtrando pelo id da nacionalidade
+const getSelectActorByIdNationality = async function (id_nacionalidade) {
+    try {
+        let sql = `select tbl_ator.id, tbl_ator.nome
+                        from tbl_ator 
+                                inner join tbl_ator_nacionalidade
+                                on tbl_ator.id = tbl_ator_nacionalidade.id_ator
+                                inner join tbl_nacionalidade
+                                on tbl_nacionalidade.id = tbl_ator_nacionalidade.id_nacionalidade
+                        where tbl_nacionalidade.id = ${id_nacionalidade}`
 
-//         let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
 
-//         if (Array.isArray(result))
-//             return result
-//         else
-//             return false
+        if (Array.isArray(result))
+            return result
+        else
+            return false
 
-//     } catch (error) {
-//         return false
-//     }
-// }
+    } catch (error) {
+        return false
+    }
+}
 
-// const getSelectLastId = async function () {
-//     try {
-//         let sql = `select id from tbl_filme_genero order by id desc limit 1`
+const getSelectLastId = async function () {
+    try {
+        let sql = `select id from tbl_ator_nacionalidade order by id desc limit 1`
 
-//         let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
 
-//         if (Array.isArray(result))
-//             return Number(result[0].id)
-//         else
-//             return false
+        if (Array.isArray(result))
+            return Number(result[0].id)
+        else
+            return false
 
-//     } catch (error) {
-//         return false
-//     }
-// }
+    } catch (error) {
+        return false
+    }
+}
 
-// const setInsertMoviesGenres = async function (filmeGenero) {
-//     try {
-//         let sql = `INSERT INTO tbl_filme_genero (id_filme, id_genero) 
-//                     VALUES (${filmeGenero.id_filme}, ${filmeGenero.id_genero});`
+const setInsertActorNationality = async function (atorNacionalidade) {
+    try {
+        let sql = `INSERT INTO tbl_ator_nacionalidade (id_ator, id_nacionalidade) 
+                    VALUES (${atorNacionalidade.id_ator}, ${atorNacionalidade.id_nacionalidade});`
 
-//         let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-//         if (result)
-//             return true
-//         else
-//             return false
+        if (result)
+            return true
+        else
+            return false
 
-//     } catch (error) {
-//         return false
-//     }
-// }
+    } catch (error) {
+        return false
+    }
+}
 
-// const setUpdateMoviesGenres = async function (filmeGenero) {
-//     try {
-//         let sql = `UPDATE tbl_filme_genero SET
-//                         id_filme    =   ${filmeGenero.id_filme},
-//                         id_genero   =   ${filmeGenero.id_genero}
-//                     WHERE id = ${filmeGenero.id};`
+const setUpdateActorNationality = async function (atorNacionalidade) {
+    try {
+        let sql = `UPDATE tbl_filme_genero SET
+                        id_ator    =   ${atorNacionalidade.id_ator},
+                        id_nacionalidade   =   ${atorNacionalidade.id_nacionalidade}
+                    WHERE id = ${atorNacionalidade.id};`
 
-//         let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-//         if (result)
-//             return true
-//         else
-//             return false
+        if (result)
+            return true
+        else
+            return false
         
-//     } catch (error) {
-//         return false
-//     }
-// }
+    } catch (error) {
+        return false
+    }
+}
 
-// const setDeleteMoviesGenres = async function (id) {
-//     try {
-//         let sql = `DELETE FROM tbl_filme_genero WHERE id = ${id};`
+const setDeleteActorNationality = async function (id) {
+    try {
+        let sql = `DELETE FROM tbl_ator_nacionalidade WHERE id = ${id};`
 
-//         let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-//         if (result)
-//             return true
-//         else
-//             return false
+        if (result)
+            return true
+        else
+            return false
         
-//     } catch (error) {
-//         return false
-//     }
+    } catch (error) {
+        return false
+    }
+}
 
-// }
-// const setDeleteMoviesGenresByIdMovies = async function (id_filme) {
-//     try {
-//         let sql = `DELETE FROM tbl_filme_genero WHERE id_filme = ${id_filme};`
+const setDeleteActorNationalityByIdActor = async function (id_ator) {
+    try {
+        let sql = `DELETE FROM tbl_ator_nacionalidade WHERE id_ator = ${id_ator};`
 
-//         let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-//         if (result)
-//             return true
-//         else
-//             return false
+        if (result)
+            return true
+        else
+            return false
         
-//     } catch (error) {
-//         return false
-//     }
-// }
+    } catch (error) {
+        return false
+    }
+}
 
 module.exports = {
     getSelectAllActorsNationality,
     getSelectByIdActorsNationality,
     getSelectActorsNationalityByIdAtor,
     getSelectNationalityByIdActor,
-    // getSelectMoviesByIdGenre,
-    // getSelectLastId,
-    // setInsertMoviesGenres,
-    // setUpdateMoviesGenres,
-    // setDeleteMoviesGenres,
-    // setDeleteMoviesGenresByIdMovies
+    getSelectActorByIdNationality,
+    getSelectLastId,
+    setInsertActorNationality,
+    setUpdateActorNationality,
+    setDeleteActorNationality,
+    setDeleteActorNationalityByIdActor
 }

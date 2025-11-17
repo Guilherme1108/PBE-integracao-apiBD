@@ -22,9 +22,16 @@ const listarAtores = async () => {
 
     try {
         let resultAtor = await atorDAO.getSelectAllActor()
-        
-        if(resultAtor){
+
+        if (resultAtor) {
             if (resultAtor.length > 0) {
+
+                for (ator of resultAtor) {
+                    let resultNacionalidades = await controllerAtorNacionalidade.listar(filme.id)
+                    if (resultNacionalidades.status_code == 200)
+                        filme.genero = resultNacionalidades.items.filme_genero
+                }
+
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.atores = resultAtor
@@ -197,7 +204,7 @@ const excluirAtor = async (id) => {
 const validarDadosAtor = async function (ator) {
 
     //Criando um onjeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     //Validação de todas as entradas de dados
     if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
@@ -205,8 +212,8 @@ const validarDadosAtor = async function (ator) {
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else if (ator.nome_artistico.length > 100) {
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome artistico incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data nascimento incorreto]'

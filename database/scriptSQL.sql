@@ -151,7 +151,7 @@ create table tbl_ator_nacionalidade (
     
     constraint FK_GENERO_ATOR_NACIONALIDADE
 	foreign key (id_nacionalidade)
-    references tbl_ator (id)
+    references tbl_nacionalidade (id)
 );
 
 INSERT INTO tbl_ator_nacionalidade (id_ator, id_nacionalidade) VALUES
